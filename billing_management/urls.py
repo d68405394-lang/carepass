@@ -45,4 +45,7 @@ urlpatterns = [
     
     # 電子サイン保存 API (ペーパーレス化の推進)
     path('save_signature/<int:client_id>/', views.SaveSignatureView.as_view(), name='save_signature'),
+    
+    # 経営・財務予測AI API (経営判断の高度化)
+    path('financial_forecast/', views.FinancialForecastView.as_view(), name='financial_forecast'),
 ]

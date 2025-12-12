@@ -1,0 +1,76 @@
+// frontend/src/EvaluationSummary.jsx
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8000/api/v1/evaluation/summary/';
+
+const EvaluationSummary = () => {
+    const [summaryData, setSummaryData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchSummary = async () => {
+            try {
+                const response = await axios.get(API_URL);
+                setSummaryData(response.data);
+            } catch (error) {
+                console.error("評価サマリーの取得中にエラー:", error);
+                setSummaryData([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSummary();
+    }, []);
+
+    if (loading) {
+        return <div style={{ padding: '20px' }}>評価データをロード中...</div>;
+    }
+    
+    // スコアに応じて色を決定するヘルパー
+    const getScoreColor = (score) => {
+        if (score >= 4.0) return 'green';
+        if (score >= 3.0) return 'orange';
+        return 'red';
+    };
+
+    return (
+        <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '800px', margin: 'auto' }}>
+            <h1>📊 職員総合評価サマリー</h1>
+            <p>勤務実績（貢献度）と相互評価（協調性）を統合した評価です。</p>
+            
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+                <thead>
+                    <tr style={{ backgroundColor: '#f4f4f4' }}>
+                        <th style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>職員名</th>
+                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>貢献度 (FTE)</th>
+                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>協調性 (平均点)</th>
+                        <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#e0f7fa' }}>総合スコア</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {summaryData.map((staff, index) => (
+                        <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#fafafa' }}>
+                            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{staff.staff_name}</td>
+                            <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>
+                                <span style={{ color: getScoreColor(staff.contribution_score) }}>{staff.contribution_score}</span>
+                            </td>
+                            <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>
+                                <span style={{ color: getScoreColor(staff.cooperation_score) }}>{staff.cooperation_score}</span>
+                            </td>
+                            <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center', fontWeight: 'bold' }}>
+                                <span style={{ color: getScoreColor(staff.overall_score) }}>{staff.overall_score}</span>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            
+            <p style={{ marginTop: '20px', fontSize: '12px', color: '#666' }}>※ 総合スコアは貢献度 50% と協調性 50% で計算されています。</p>
+        </div>
+    );
+};
+
+export default EvaluationSummary;

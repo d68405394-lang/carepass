@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import SignaturePad from './SignaturePad';
+import DashboardSettings from './DashboardSettings';
+import HelpTooltip from './HelpTooltip';
 // 実際の API 通信ロジックを実装します
 
 const API_URL = 'http://localhost:8000/api/dashboard/fte/';
@@ -32,6 +34,15 @@ const Dashboard = () => {
   const [analysisResults, setAnalysisResults] = useState([]);
   const [churnPredictions, setChurnPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [roleSettings, setRoleSettings] = useState({
+    showFTE: true,
+    showCSVExport: true,
+    showPDF: true,
+    showAIAnalysis: true,
+    showChurnPrediction: true,
+    showSignature: true,
+    showFinancialForecast: true,
+  });
 
   useEffect(() => {
     // 経営ダッシュボードAPIからデータを取得する
@@ -139,6 +150,9 @@ const FTEChart = ({ data }) => {
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h1 style={{ borderBottom: '2px solid #333', paddingBottom: '10px' }}>🟥 管理者ダッシュボード</h1>
       
+      {/* 役職別ダッシュボード設定 */}
+      <DashboardSettings onRoleChange={setRoleSettings} />
+      
       {/* 異常値アラートエリア (レイヤー 1: 最優先) */}
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {kasanAlerts.length > 0 ? (
@@ -167,6 +181,15 @@ const FTEChart = ({ data }) => {
       </div>
 
       {/* CSV出力ボタンエリア */}
+      {roleSettings.showCSVExport && (
+      <>
+      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '20px' }}>
+        💾 CSV出力
+        <HelpTooltip
+          title="CSV出力機能"
+          content="国保連請求、給与計算、会計データをCSV形式で出力できます。外部システムとの連携に便利です。"
+        />
+      </h2>
       <div style={{ marginTop: '20px', marginBottom: '20px', display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
         {/* 国保連CSV出力ボタン */}
         <button
@@ -234,8 +257,18 @@ const FTEChart = ({ data }) => {
           📊 会計CSV出力
         </button>
       </div>
+      </>
+      )}
 
-      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '20px' }}>📊 専門職FTEと目標FTEの比較</h2>
+      {roleSettings.showFTE && (
+      <>
+      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '20px' }}>
+        📊 専門職FTEと目標FTEの比較
+        <HelpTooltip
+          title="FTE（常勤換算）機能"
+          content="職員の勤務時間を常勤換算し、加算要件を満たしているかを自動判定します。専門職の配置が不足している場合は警告が表示されます。"
+        />
+      </h2>
       {/* FTE グラフのコンポーネント */}
       <div style={{ border: '1px solid #ccc', padding: '15px', margin: '10px 0' }}>
         {fteStatus.length > 0 ? (
@@ -244,9 +277,19 @@ const FTEChart = ({ data }) => {
           <p>表示するFTEデータがありません。</p>
         )}
       </div>
+      </>
+      )}
       
       {/* 個別支援計画書PDF出力セクション */}
-      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '30px' }}>📝 個別支援計画書PDF出力</h2>
+      {roleSettings.showPDF && (
+      <>
+      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '30px' }}>
+        📝 個別支援計画書PDF出力
+        <HelpTooltip
+          title="個別支援計画書PDF出力"
+          content="利用者ごとの個別支援計画書をPDF形式で出力できます。指導監査や保護者への提供に使用できます。"
+        />
+      </h2>
       <div style={{ border: '1px solid #ccc', padding: '15px', margin: '10px 0' }}>
         {clients.length > 0 ? (
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -296,9 +339,19 @@ const FTEChart = ({ data }) => {
           <p>表示する利用者データがありません。</p>
         )}
       </div>
+      </>
+      )}
       
       {/* AI分析結果表示セクション */}
-      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '30px' }}>🤖 AI記録品質分析結果</h2>
+      {roleSettings.showAIAnalysis && (
+      <>
+      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '30px' }}>
+        🤖 AI記録品質分析結果
+        <HelpTooltip
+          title="AI記録品質分析"
+          content="AIが進捗記録の品質を分析し、感情スコアや改善提案を提供します。記録の質を向上させ、利用者理解を深めることができます。"
+        />
+      </h2>
       <div style={{ border: '1px solid #ccc', padding: '15px', margin: '10px 0' }}>
         {analysisResults.length > 0 ? (
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -367,9 +420,19 @@ const FTEChart = ({ data }) => {
           <p>AI分析結果がありません。進捗記録を入力し、AI分析を実行してください。</p>
         )}
       </div>
+      </>
+      )}
       
       {/* 離脱リスク予測アラートセクション */}
-      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '30px' }}>🚨 利用者離脱リスク予測</h2>
+      {roleSettings.showChurnPrediction && (
+      <>
+      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '30px' }}>
+        🚨 利用者離脱リスク予測
+        <HelpTooltip
+          title="離脱リスク予測"
+          content="AIが利用者の成長スコア、記録頻度、感情スコアなどを分析し、離脱リスクを予測します。早期に対応することで、利用者の定着率を向上させることができます。"
+        />
+      </h2>
       <div style={{ border: '1px solid #ccc', padding: '15px', margin: '10px 0' }}>
         {churnPredictions.predictions && churnPredictions.predictions.length > 0 ? (
           <>
@@ -470,9 +533,19 @@ const FTEChart = ({ data }) => {
           <p>離脱リスク予測データがありません。進捗記録を入力してください。</p>
         )}
       </div>
+      </>
+      )}
       
       {/* 電子サインセクション */}
-      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '30px' }}>✍️ 電子サイン（個別支援計画書用）</h2>
+      {roleSettings.showSignature && (
+      <>
+      <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '5px', marginTop: '30px' }}>
+        ✍️ 電子サイン（個別支援計画書用）
+        <HelpTooltip
+          title="電子サイン機能"
+          content="タブレットで保護者の署名を取得し、デジタル保存できます。ペーパーレス化を実現し、管理が簡単になります。"
+        />
+      </h2>
       <div style={{ border: '1px solid #ccc', padding: '15px', margin: '10px 0' }}>
         <p style={{ marginBottom: '20px', color: '#555' }}>
           以下から利用者を選択し、保護者の電子サインを取得してください。
@@ -500,6 +573,8 @@ const FTEChart = ({ data }) => {
           <p>表示する利用者データがありません。</p>
         )}
       </div>
+      </>
+      )}
       
     </div>
   );

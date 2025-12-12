@@ -918,3 +918,23 @@ class SaveSignatureView(APIView):
             return Response({"error": "指定された利用者が見つかりません。"}, status=404)
         except Exception as e:
             return Response({"error": f"署名の保存中にエラーが発生しました: {str(e)}"}, status=500)
+
+
+# 経営・財務予測API
+class FinancialForecastView(APIView):
+    """
+    経営・財務予測を提供するAPI
+    """
+    def get(self, request, format=None):
+        from .financial_forecast import calculate_financial_forecast
+        
+        # クエリパラメータから予測月数を取得（デフォルト: 3ヶ月）
+        months_ahead = int(request.GET.get('months', 3))
+        
+        try:
+            forecast_data = calculate_financial_forecast(months_ahead=months_ahead)
+            return Response(forecast_data)
+        except Exception as e:
+            return Response({
+                "error": f"財務予測の計算中にエラーが発生しました: {str(e)}"
+            }, status=500)

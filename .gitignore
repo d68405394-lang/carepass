@@ -1,0 +1,109 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually the binaries are in dist/
+#  but you need to commit the spec file and only ignore the build/ directory
+#  and the generated exe/app files
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+/media
+/static
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Editors
+.vscode
+.idea
+*.swp
+*~
+.DS_Store
+
+# Virtual environment
+venv/
+.venv/
+env/
+.env/
+
+# OS-specific
+.DS_Store
+.Trashes
+Thumbs.db
+
+# Node.js / React
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+frontend/dist/
+frontend/.vite/
+
+# Deployment packages
+*.zip
+*.tar.gz
+
+# Browser data
+.browser_data_dir/
+
+# Shell history
+.bash_history
+
+# Temporary and cache files
+.cache/
+*.sqlite3-journal
