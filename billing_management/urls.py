@@ -48,4 +48,24 @@ urlpatterns = [
     
     # 経営・財務予測AI API (経営判断の高度化)
     path('financial_forecast/', views.FinancialForecastView.as_view(), name='financial_forecast'),
+    
+    # メール機能 API (保護者連絡の自動化)
+    path('email/send/', views.SendEmailView.as_view(), name='send_email'),
+    path('email/mark_read/<int:recipient_id>/', views.MarkAsReadView.as_view(), name='mark_as_read'),
+    path('email/read_status/<int:message_id>/', views.ReadStatusView.as_view(), name='read_status'),
+    path('email/unread/<int:client_id>/', views.UnreadMessagesView.as_view(), name='unread_messages'),
+    path('email/history/', views.MessageHistoryView.as_view(), name='message_history'),
+    
+    # 保護者ポータル API (保護者向け情報公開)
+    path('guardian/login/', views.GuardianLoginView.as_view(), name='guardian_login'),
+    path('guardian/logout/', views.GuardianLogoutView.as_view(), name='guardian_logout'),
+    path('guardian/dashboard/<int:client_id>/', views.GuardianDashboardView.as_view(), name='guardian_dashboard'),
+    path('guardian/activities/<int:client_id>/', views.ActivityLogView.as_view(), name='activity_log'),
+    
+    # ゲーミフィケーション API (モチベーション向上)
+    path('gamification/badges/<int:client_id>/', views.ClientBadgesView.as_view(), name='client_badges'),
+    path('gamification/check_badges/<int:client_id>/', views.CheckBadgesView.as_view(), name='check_badges'),
+    path('gamification/points/<int:client_id>/', views.ClientPointsView.as_view(), name='client_points'),
+    path('gamification/award_points/<int:client_id>/', views.AwardPointsView.as_view(), name='award_points'),
+    path('gamification/leaderboard/', views.LeaderboardView.as_view(), name='leaderboard'),
 ]

@@ -4,6 +4,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import SignaturePad from './SignaturePad';
 import DashboardSettings from './DashboardSettings';
 import HelpTooltip from './HelpTooltip';
+import EmailComposer from './EmailComposer';
+import BadgeDisplay from './BadgeDisplay';
 // 実際の API 通信ロジックを実装します
 
 const API_URL = 'http://localhost:8000/api/dashboard/fte/';
@@ -572,6 +574,32 @@ const FTEChart = ({ data }) => {
         ) : (
           <p>表示する利用者データがありません。</p>
         )}
+      </div>
+      </>
+      )}
+      
+      {/* メール送信セクション */}
+      {(userRole === 'admin' || userRole === 'service_manager' || userRole === 'staff') && (
+      <>
+      <div style={{ marginTop: '40px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
+        <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          📧 メール送信
+          <HelpTooltip text="保護者への一齊メール送信や個別連絡ができます。既読管理やファイル添付にも対応しています。" />
+        </h2>
+        <EmailComposer />
+      </div>
+      </>
+      )}
+      
+      {/* ゲーミフィケーションセクション */}
+      {(userRole === 'admin' || userRole === 'service_manager' || userRole === 'staff') && (
+      <>
+      <div style={{ marginTop: '40px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
+        <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          🎮 ゲーミフィケーション
+          <HelpTooltip text="利用者のモチベーション向上のためのバッジやポイントシステムです。出席や活動参加でポイントを獲得できます。" />
+        </h2>
+        <BadgeDisplay clientId={clients.length > 0 ? clients[0].id : null} />
       </div>
       </>
       )}

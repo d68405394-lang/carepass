@@ -938,3 +938,12 @@ class FinancialForecastView(APIView):
             return Response({
                 "error": f"財務予測の計算中にエラーが発生しました: {str(e)}"
             }, status=500)
+
+# メール機能のインポート
+from .modules.email.views import SendEmailView, MarkAsReadView, ReadStatusView, UnreadMessagesView, MessageHistoryView
+
+# 保護者ポータルのインポート
+from .modules.portal.views import GuardianLoginView, GuardianLogoutView, GuardianDashboardView, ActivityLogView
+
+# ゲーミフィケーションのインポート
+from .modules.gamification.views import ClientBadgesView, CheckBadgesView, ClientPointsView, AwardPointsView, LeaderboardView
