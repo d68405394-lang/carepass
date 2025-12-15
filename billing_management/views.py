@@ -502,7 +502,8 @@ class ClientListView(APIView):
         return Response(client_list)
 
 
-from openai import OpenAI
+# Google AI (Gemini) integration
+from .ai_utils import analyze_sentiment, generate_progress_record, predict_churn_risk
 import os
 import json
 from django.utils import timezone
@@ -524,55 +525,9 @@ class SentimentAnalysisView(APIView):
         if not assessment.specialist_comment:
             return Response({"error": "分析対象のコメントがありません"}, status=400)
         
-        # OpenAI APIクライアントを初期化
-        client = OpenAI()
-        
-        # プロンプトの作成
-        prompt = f"""
-あなたは福祉事業所の専門家です。以下の職員による利用者の進捗記録を分析し、記録の質を評価してください。
-
-【利用者情報】
-- 氏名: {assessment.client.full_name}
-- 評価日: {assessment.assessment_date}
-- 成長スコア: {assessment.progress_score} / 5.0
-
-【職員のコメント】
-{assessment.specialist_comment}
-
-以下の項目について分析し、JSON形式で回答してください：
-
-1. sentiment_score: 感情スコア（-1.0〜1.0、ポジティブ=1.0、ネガティブ=-1.0、ニュートラル=0.0）
-2. record_quality_score: 記録の質スコア（1〜5、5が最高）
-   - 具体性: 具体的な行動や状況が記録されているか
-   - 客観性: 主観的な表現ではなく、客観的な観察が記録されているか
-   - 専門性: 専門的な視点や用語が適切に使用されているか
-3. keywords: 重要なキーワード（最大5個、カンマ区切り）
-4. feedback: 改善提案（具体的なフィードバック、100文字以内）
-
-回答例：
-{{
-  "sentiment_score": 0.8,
-  "record_quality_score": 4,
-  "keywords": "コミュニケーション, 社会性, 集団活動, 成長, 積極性",
-  "feedback": "具体的な場面の記述が優れています。今後は数値的な指標（回数、時間など）を追加すると、さらに客観性が向上します。"
-}}
-"""
-        
         try:
-            # OpenAI APIを呼び出し
-            response = client.chat.completions.create(
-                model="gpt-4.1-mini",
-                messages=[
-                    {"role": "system", "content": "あなたは福祉事業所の記録分析の専門家です。"},
-                    {"role": "user", "content": prompt}
-                ],
-                response_format={"type": "json_object"},
-                temperature=0.3,
-            )
-            
-            # レスポンスを解析
-            result_text = response.choices[0].message.content
-            result = json.loads(result_text)
+            # Google AI (Gemini) APIを呼び出し
+            result = analyze_sentiment(assessment)
             
             # ProgressAssessmentモデルに分析結果を保存
             assessment.sentiment_score = result.get('sentiment_score', 0.0)
@@ -846,28 +801,8 @@ class AiRecordGeneration(APIView):
 
         # 3. AIによる記録ドラフトの生成
         try:
-            # GPT-4.1-miniに、断片情報と計画情報を与え、法定記録を生成させる
-            prompt = (
-                f"あなたは福祉施設の専門職員です。以下の情報と目標に基づき、専門的な進捗記録を生成してください。\n"
-                f"記録の形式は、具体的な行動、効果、専門的な視点を含んだ文章にしてください。\n"
-                f"記録は200文字以内で、客観的かつ具体的に記述してください。\n\n"
-                f"---個別支援計画情報---\n{plan_context}\n\n"
-                f"---職員の断片的な入力---\n{user_input}\n\n"
-                f"上記の情報に基づき、法定形式の進捗記録を生成してください。"
-            )
-            
-            # OpenAI APIを呼び出して記録を生成
-            client_openai = OpenAI()
-            response = client_openai.chat.completions.create(
-                model="gpt-4.1-mini",
-                messages=[
-                    {"role": "system", "content": "あなたは福祉施設の専門職員として、利用者の進捗記録を作成する専門家です。"},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=500,
-                temperature=0.7
-            )
-            generated_text = response.choices[0].message.content.strip()
+            # Google AI (Gemini)で記録を生成
+            generated_text = generate_progress_record(client, user_input, plan_context)
 
             # 4. ドラフトを返す
             return Response({

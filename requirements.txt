@@ -8,4 +8,4 @@ psycopg2-binary==2.9.10
 whitenoise==6.8.2
 dj-database-url==2.3.0
 reportlab==4.4.6
-openai==2.9.0
+google-generativeai==0.8.3
