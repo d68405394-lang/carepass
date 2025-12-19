@@ -1,0 +1,120 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.landing-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.landing-content {
+    max-width: 1200px;
+    width: 100%;
+    text-align: center;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.logo-icon {
+    font-size: 4rem;
+}
+
+.logo-text {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+    font-size: 1.8rem;
+    color: white;
+    margin-bottom: 3rem;
+    opacity: 0.95;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    display: block;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #ffd700;
+}
+
+.feature-card p {
+    line-height: 1.6;
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+.footer {
+    margin-top: 4rem;
+    color: white;
+    opacity: 0.8;
+}
+
+.footer p {
+    margin: 0.5rem 0;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .logo-text {
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1.3rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .feature-card {
+        padding: 2rem;
+    }
+}

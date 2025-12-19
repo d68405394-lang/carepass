@@ -5,17 +5,26 @@ set -o errexit
 echo "Installing Python dependencies..."
 pip install -r requirements.txt
 
+echo "Installing Node.js dependencies for frontend..."
+cd frontend
+npm install
+
+echo "Building React frontend..."
+npm run build
+
+echo "Returning to project root..."
+cd ..
+
 echo "Creating frontend assets directory..."
 mkdir -p staticfiles/assets
 
-echo "Copying frontend assets if they exist..."
+echo "Copying frontend assets..."
 if [ -d "frontend/dist/assets" ]; then
     cp -r frontend/dist/assets/* staticfiles/assets/
     echo "Frontend assets copied successfully"
 else
-    echo "No frontend assets found, creating placeholder assets..."
-    mkdir -p staticfiles/assets
-    echo "/* Placeholder CSS */" > staticfiles/assets/style.css
+    echo "ERROR: Frontend build failed - no assets found"
+    exit 1
 fi
 
 echo "Collecting static files..."
