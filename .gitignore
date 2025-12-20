@@ -1,109 +1,60 @@
-# Byte-compiled / optimized / DLL files
+# ====================================================================
+# 🚀 CarePass プロジェクト最適化版 .gitignore
+# ====================================================================
+
+# --- [重要] フロントエンド配信設定 ---
+# 通常、ビルド成果物(dist)は除外しますが、今回はDjangoから配信するため
+# あえて除外リストから外しています。これによりRenderに画面が届きます。
+# frontend/dist/  <-- 意図的にコメントアウトしています
+
+# --- Python / Django ---
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# PyInstaller
-#  Usually the binaries are in dist/
-#  but you need to commit the spec file and only ignore the build/ directory
-#  and the generated exe/app files
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-.pytest_cache/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-/media
-/static
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Editors
-.vscode
-.idea
-*.swp
-*~
-.DS_Store
-
-# Virtual environment
-venv/
-.venv/
 env/
-.env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+# 開発用のDBはGitHubに上げず、Render上のDBを使用する
+db.sqlite3
+db.sqlite3-journal
+# 収集された静的ファイル
+staticfiles/
+media/
 
-# OS-specific
-.DS_Store
-.Trashes
-Thumbs.db
-
-# Node.js / React
+# --- Node.js / React (frontend) ---
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
 .pnpm-store/
-frontend/dist/
+# Viteの一時キャッシュのみ除外
 frontend/.vite/
 
-# Deployment packages
-*.zip
-*.tar.gz
+# --- 環境変数・機密情報 ---
+# パスワードやAPIキーが漏洩しないように保護
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Browser data
-.browser_data_dir/
+# --- エディタ / OS 固有ファイル ---
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.DS_Store
+Thumbs.db
 
-# Shell history
-.bash_history
-
-# Temporary and cache files
+# --- ログ・一時ファイル ---
+*.log
+pip-log.txt
 .cache/
-*.sqlite3-journal
+.pytest_cache/
