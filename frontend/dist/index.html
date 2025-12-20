@@ -1,14 +1,204 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-    <script type="module" crossorigin src="/assets/index-DDXthQ7w.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BXn_C-GP.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Care Pass - 福祉管理システム</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                        sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+        
+        .feature-card p {
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .api-status {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-success {
+            background: rgba(0, 255, 0, 0.1);
+            border-color: rgba(0, 255, 0, 0.3);
+        }
+        
+        .status-success .status-indicator {
+            background: #00ff00;
+        }
+        
+        .status-error {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: rgba(255, 0, 0, 0.3);
+        }
+        
+        .status-error .status-indicator {
+            background: #ff0000;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .footer {
+            margin-top: 3rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        .admin-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        
+        .admin-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🏥 Care Pass</div>
+        <div class="subtitle">福祉管理システム</div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>📊 進捗管理</h3>
+                <p>利用者の進捗状況をリアルタイムで追跡し、データ駆動型のケアプランを提供します。</p>
+            </div>
+            <div class="feature-card">
+                <h3>🤖 AI分析</h3>
+                <p>感情分析と予測機能により、より効果的な福祉サービスを実現します。</p>
+            </div>
+            <div class="feature-card">
+                <h3>💰 請求管理</h3>
+                <p>国保連請求や給与計算を自動化し、事務作業の負担を大幅に削減します。</p>
+            </div>
+            <div class="feature-card">
+                <h3>📱 保護者ポータル</h3>
+                <p>保護者とのコミュニケーションを円滑にし、透明性の高いケアサービスを提供します。</p>
+            </div>
+        </div>
+        
+        <div id="api-status" class="api-status status-error">
+            <span class="status-indicator"></span>
+            <span id="status-text">APIサーバーの接続を確認中...</span>
+        </div>
+        
+        <div class="footer">
+            <p>Django Backend API • PostgreSQL Database • AI Integration</p>
+            <p>© 2024 Care Pass - 福祉管理システム</p>
+            <a href="/admin/" class="admin-link">管理画面 (admin/password123)</a>
+        </div>
+    </div>
+    
+    <script>
+        // API接続確認
+        function checkAPIConnection() {
+            fetch('/api/clients/')
+                .then(response => {
+                    const statusElement = document.getElementById('api-status');
+                    const statusText = document.getElementById('status-text');
+                    
+                    if (response.ok) {
+                        statusElement.className = 'api-status status-success';
+                        statusText.textContent = 'APIサーバーが正常に動作しています';
+                        console.log('API接続成功');
+                    } else {
+                        statusElement.className = 'api-status status-error';
+                        statusText.textContent = `APIエラー: ${response.status}`;
+                        console.log('API接続エラー:', response.status);
+                    }
+                })
+                .catch(error => {
+                    const statusElement = document.getElementById('api-status');
+                    const statusText = document.getElementById('status-text');
+                    
+                    statusElement.className = 'api-status status-error';
+                    statusText.textContent = 'API接続に失敗しました';
+                    console.log('API接続に失敗しました:', error);
+                });
+        }
+        
+        // ページロード時にAPI接続を確認
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(checkAPIConnection, 1000);
+        });
+    </script>
+</body>
 </html>
