@@ -58,3 +58,10 @@ Thumbs.db
 pip-log.txt
 .cache/
 .pytest_cache/
+
+# --- セキュリティ: シェル履歴とブラウザデータ ---
+.bash_history
+.browser_data_dir/
+
+# --- 配布用zipファイル ---
+*.zip

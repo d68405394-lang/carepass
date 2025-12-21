@@ -56,6 +56,17 @@
             border-radius: 15px;
             padding: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+        
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         
         .feature-card h3 {
@@ -137,22 +148,22 @@
         <div class="subtitle">福祉管理システム</div>
         
         <div class="features">
-            <div class="feature-card">
+            <a href="/progress/" class="feature-card">
                 <h3>📊 進捗管理</h3>
                 <p>利用者の進捗状況をリアルタイムで追跡し、データ駆動型のケアプランを提供します。</p>
-            </div>
-            <div class="feature-card">
+            </a>
+            <a href="/ai-analysis/" class="feature-card">
                 <h3>🤖 AI分析</h3>
                 <p>感情分析と予測機能により、より効果的な福祉サービスを実現します。</p>
-            </div>
-            <div class="feature-card">
+            </a>
+            <a href="/billing/" class="feature-card">
                 <h3>💰 請求管理</h3>
                 <p>国保連請求や給与計算を自動化し、事務作業の負担を大幅に削減します。</p>
-            </div>
-            <div class="feature-card">
+            </a>
+            <a href="/guardian/" class="feature-card">
                 <h3>📱 保護者ポータル</h3>
                 <p>保護者とのコミュニケーションを円滑にし、透明性の高いケアサービスを提供します。</p>
-            </div>
+            </a>
         </div>
         
         <div id="api-status" class="api-status status-error">
