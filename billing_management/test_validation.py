@@ -20,7 +20,11 @@ def run_validation_tests():
     print("--- ステップ 1: テストデータの準備 ---")
     
     # 1. ユーザー作成
-    user_taro, _ = User.objects.get_or_create(username='taro_jo', defaults={'password': 'password123'})
+    # テスト用ユーザー（パスワードはハッシュ化される）
+    user_taro, _ = User.objects.get_or_create(username='taro_jo')
+    if _:
+        user_taro.set_password('test_password_for_development_only')
+        user_taro.save()
 
     # 2. 事業所作成
     location, _ = ServiceLocation.objects.get_or_create(location_id='LOC01', defaults={'location_name': '本店'})

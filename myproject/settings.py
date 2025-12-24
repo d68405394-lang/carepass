@@ -22,7 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-$ts2%5^tbn99bod2^&*n8(g_b5#e)b*xq+^=*gq%v=fl*1&*kt')
+# SECRET_KEYは環境変数から必ず設定すること（デフォルト値はセキュリティリスク）
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    # 開発環境のみのフォールバック（本番環境では必ず環境変数を設定）
+    if os.environ.get('APP_ENV') == 'PROD':
+        raise ValueError('⚠️ SECRET_KEY環境変数が設定されていません！')
+    SECRET_KEY = 'django-insecure-dev-only-do-not-use-in-production'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
@@ -157,3 +163,91 @@ if 'RENDER_EXTERNAL_URL' in os.environ:
     CSRF_TRUSTED_ORIGINS = [os.environ['RENDER_EXTERNAL_URL']]
 else:
     CSRF_TRUSTED_ORIGINS = ['http://localhost:5173', 'https://8000-ibqa2709bn7qa8oaxxs5m-62dc687b.manus-asia.computer']
+
+# ====================================================================
+# 🔒 セキュリティ設定強化
+# ====================================================================
+
+# HTTPS/SSL設定（本番環境のみ）
+if not DEBUG:
+    # HTTPS強制リダイレクト
+    SECURE_SSL_REDIRECT = True
+    
+    # HSTS（HTTP Strict Transport Security）
+    SECURE_HSTS_SECONDS = 31536000  # 1年間
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # セキュアCookie設定
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    
+    # X-Content-Type-Options
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    
+    # X-Frame-Options
+    X_FRAME_OPTIONS = 'DENY'
+    
+    # X-XSS-Protection
+    SECURE_BROWSER_XSS_FILTER = True
+
+# セッションセキュリティ
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_AGE = 3600  # 1時間でセッション期限切れ
+
+# CSRFセキュリティ
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Lax'
+
+# パスワードバリデーション強化
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 12,  # 最小12文字
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+# ====================================================================
+# 🔒 セキュリティログ設定
+# ====================================================================
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django.security': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
