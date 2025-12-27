@@ -12,76 +12,155 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-                        sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
             padding: 2rem;
         }
         
         .container {
-            max-width: 1000px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .header {
-            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
             margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
         .header h1 {
+            color: #667eea;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+            color: #666;
+            font-size: 1.1rem;
         }
         
-        .content {
-            margin: 2rem 0;
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
-        .feature-list {
-            list-style: none;
-            padding: 0;
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
         }
         
-        .feature-list li {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem 1.5rem;
-            margin-bottom: 1rem;
+        .client-reports {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .report-card {
+            background: #f8f9fa;
+            padding: 2rem;
             border-radius: 10px;
-            border-left: 4px solid #ffd700;
+            border-left: 5px solid #667eea;
+        }
+        
+        .report-card h3 {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .report-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .info-item label {
+            display: block;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .info-item .value {
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .assessment-list {
+            margin-top: 1.5rem;
+        }
+        
+        .assessment-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #ffd700;
+        }
+        
+        .assessment-item .date {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .assessment-item .score {
+            display: inline-block;
+            background: #ffd700;
+            color: #333;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .assessment-item .comment {
+            color: #666;
+            line-height: 1.6;
         }
         
         .back-button {
             display: inline-block;
-            margin-top: 2rem;
             padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
             text-decoration: none;
             border-radius: 10px;
-            transition: background 0.3s ease;
             font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
         }
         
         .back-button:hover {
-            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .empty-state p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -89,23 +168,79 @@
     <div class="container">
         <div class="header">
             <h1>📱 保護者ポータル</h1>
-            <p>保護者とのコミュニケーションを円滑に</p>
+            <p>お子様の成長レポートと進捗状況</p>
         </div>
         
-        <div class="content">
-            <h2 style="margin-bottom: 1rem;">主な機能</h2>
-            <ul class="feature-list">
-                <li>📸 日々の活動写真と動画の共有</li>
-                <li>📝 利用者の状況レポートの閲覧</li>
-                <li>💬 スタッフとのメッセージング機能</li>
-                <li>📅 スケジュールとイベントの確認</li>
-                <li>📊 成長記録と進捗の可視化</li>
-                <li>🔔 重要なお知らせのプッシュ通知</li>
-            </ul>
-            
-            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0, 255, 0, 0.1); border-radius: 10px; border: 1px solid rgba(0, 255, 0, 0.3);">
-                <p style="font-size: 1.1rem;">💡 <strong>ヒント:</strong> 保護者の方々とのコミュニケーションが円滑になり、信頼関係の構築に役立ちます。</p>
-            </div>
+        <div class="section">
+            <h2>👨‍👩‍👧 成長レポート</h2>
+            {% if clients %}
+                <div class="client-reports">
+                    {% for client in clients %}
+                    <div class="report-card">
+                        <h3>{{ client.full_name }} さんの成長レポート</h3>
+                        
+                        <div class="report-info">
+                            <div class="info-item">
+                                <label>利用者コード</label>
+                                <div class="value">{{ client.client_code }}</div>
+                            </div>
+                            <div class="info-item">
+                                <label>生年月日</label>
+                                <div class="value">{{ client.birth_date|date:"Y年m月d日" }}</div>
+                            </div>
+                            <div class="info-item">
+                                <label>保護者</label>
+                                <div class="value">{{ client.guardian_name|default:"未設定" }}</div>
+                            </div>
+                            <div class="info-item">
+                                <label>受給者番号</label>
+                                <div class="value">{{ client.recipient_number|default:"未設定" }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item" style="margin-bottom: 1rem;">
+                            <label>🎯 長期目標</label>
+                            <div class="value">{{ client.long_term_goal|default:"未設定" }}</div>
+                        </div>
+                        
+                        <div class="info-item" style="margin-bottom: 1rem;">
+                            <label>📋 短期目標</label>
+                            <div class="value">{{ client.short_term_goal|default:"未設定" }}</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <label>🤝 支援内容</label>
+                            <div class="value">{{ client.support_content|default:"未設定" }}</div>
+                        </div>
+                        
+                        {% if client_reports %}
+                            {% with reports=client_reports|get_item:client.client_code %}
+                                {% if reports %}
+                                <div class="assessment-list">
+                                    <h4 style="color: #667eea; margin-bottom: 1rem;">📈 最近の評価記録</h4>
+                                    {% for assessment in reports|slice:":5" %}
+                                    <div class="assessment-item">
+                                        <div class="date">{{ assessment.assessment_date|date:"Y年m月d日" }}</div>
+                                        <div class="score">成長スコア: {{ assessment.progress_score }}</div>
+                                        <div class="comment">
+                                            <strong>担当:</strong> {{ assessment.staff.full_name|default:"未割当" }}<br>
+                                            <strong>コメント:</strong> {{ assessment.specialist_comment|default:"コメントなし" }}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>📭 登録されている利用者がいません</p>
+                    <p>管理画面から利用者を追加してください</p>
+                </div>
+            {% endif %}
         </div>
         
         <a href="/" class="back-button">← ホームに戻る</a>

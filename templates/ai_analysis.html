@@ -12,100 +12,256 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-                        sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
             padding: 2rem;
         }
         
         .container {
-            max-width: 1000px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .header {
-            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
             margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
         }
         
         .header h1 {
+            color: #667eea;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+            color: #666;
+            font-size: 1.1rem;
         }
         
-        .content {
-            margin: 2rem 0;
+        .ai-features {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
-        .feature-list {
-            list-style: none;
-            padding: 0;
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-left: 5px solid #ffd700;
+            transition: transform 0.3s ease;
         }
         
-        .feature-list li {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem 1.5rem;
+        .feature-card:hover {
+            transform: translateX(10px);
+        }
+        
+        .feature-card h2 {
+            color: #667eea;
+            font-size: 1.5rem;
             margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .feature-card .icon {
+            font-size: 2rem;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card .status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .status.coming-soon {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .data-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .data-section h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .assessment-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
             border-radius: 10px;
-            border-left: 4px solid #ffd700;
+            border-left: 4px solid #667eea;
+        }
+        
+        .assessment-card h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .assessment-card .date {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .assessment-card .score {
+            display: inline-block;
+            background: #ffd700;
+            color: #333;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 0.5rem 0;
         }
         
         .back-button {
             display: inline-block;
-            margin-top: 2rem;
             padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
             text-decoration: none;
             border-radius: 10px;
-            transition: background 0.3s ease;
             font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
         }
         
         .back-button:hover {
-            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🤖 AI分析</h1>
-            <p>感情分析と予測機能で効果的な福祉サービスを実現</p>
+            <h1>🤖 AI機能</h1>
+            <p>Google AIによる高度な分析とサポート</p>
         </div>
         
-        <div class="content">
-            <h2 style="margin-bottom: 1rem;">AI機能</h2>
-            <ul class="feature-list">
-                <li>🧠 利用者の感情状態の自動分析</li>
-                <li>📈 将来の支援ニーズの予測</li>
-                <li>💬 自然言語処理による記録の自動要約</li>
-                <li>🎯 個別最適化されたケアプランの提案</li>
-                <li>⚠️ リスク要因の早期検出と警告</li>
-                <li>📊 AIによる効果測定とレポート生成</li>
-            </ul>
-            
-            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0, 255, 0, 0.1); border-radius: 10px; border: 1px solid rgba(0, 255, 0, 0.3);">
-                <p style="font-size: 1.1rem;">💡 <strong>ヒント:</strong> OpenAI APIを活用した高度な分析機能を実装予定です。</p>
+        <!-- AI機能一覧 -->
+        <div class="ai-features">
+            <div class="feature-card">
+                <h2><span class="icon">🧠</span> 利用者の感情状態の自動分析</h2>
+                <p>
+                    記録されたコメントや行動データから、利用者の感情状態を自動的に分析します。
+                    ポジティブ・ネガティブ・ニュートラルの感情スコアを算出し、メンタルヘルスの変化を追跡します。
+                </p>
+                <span class="status coming-soon">🚀 開発予定</span>
             </div>
+            
+            <div class="feature-card">
+                <h2><span class="icon">📊</span> 将来の支援ニーズの予測</h2>
+                <p>
+                    過去の進捗データと成長パターンから、今後必要となる支援内容を予測します。
+                    早期介入が必要な領域を特定し、プロアクティブなケアプランを提案します。
+                </p>
+                <span class="status coming-soon">🚀 開発予定</span>
+            </div>
+            
+            <div class="feature-card">
+                <h2><span class="icon">💬</span> 自然言語処理による記録の自動要約</h2>
+                <p>
+                    長文の専門職コメントを自動的に要約し、重要なポイントを抽出します。
+                    キーワード抽出により、支援の質を定量的に評価します。
+                </p>
+                <span class="status coming-soon">🚀 開発予定</span>
+            </div>
+            
+            <div class="feature-card">
+                <h2><span class="icon">🎯</span> 個別最適化されたケアプランの提案</h2>
+                <p>
+                    利用者の特性、進捗状況、目標達成度を総合的に分析し、
+                    一人ひとりに最適化されたケアプランを自動生成します。
+                </p>
+                <span class="status coming-soon">🚀 開発予定</span>
+            </div>
+            
+            <div class="feature-card">
+                <h2><span class="icon">⚠️</span> リスク要因の早期検出と警告</h2>
+                <p>
+                    進捗スコアの急激な低下や、コメント内容の変化から、
+                    潜在的なリスク要因を早期に検出し、アラートを発信します。
+                </p>
+                <span class="status coming-soon">🚀 開発予定</span>
+            </div>
+            
+            <div class="feature-card">
+                <h2><span class="icon">📈</span> AIによる効果測定とレポート生成</h2>
+                <p>
+                    支援の効果を定量的に測定し、視覚的なレポートを自動生成します。
+                    保護者向け、監査向けなど、目的に応じたレポート形式を選択できます。
+                </p>
+                <span class="status coming-soon">🚀 開発予定</span>
+            </div>
+        </div>
+        
+        <!-- 分析対象データ -->
+        <div class="data-section">
+            <h2>📋 分析対象データ（最新10件）</h2>
+            {% if assessments %}
+                <div class="assessment-grid">
+                    {% for assessment in assessments %}
+                    <div class="assessment-card">
+                        <h3>{{ assessment.client.full_name }}</h3>
+                        <div class="date">{{ assessment.assessment_date|date:"Y年m月d日" }}</div>
+                        <div class="score">スコア: {{ assessment.progress_score }}</div>
+                        <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
+                            担当: {{ assessment.staff.full_name|default:"未割当" }}
+                        </p>
+                        <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
+                            {{ assessment.specialist_comment|truncatewords:20|default:"コメントなし" }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>📭 分析対象のデータがありません</p>
+                    <p>進捗評価データを追加すると、AI分析が利用可能になります</p>
+                </div>
+            {% endif %}
         </div>
         
         <a href="/" class="back-button">← ホームに戻る</a>

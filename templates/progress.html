@@ -12,76 +12,140 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-                        sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
             padding: 2rem;
         }
         
         .container {
-            max-width: 1000px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .header {
-            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
             margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
         .header h1 {
+            color: #667eea;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+            color: #666;
+            font-size: 1.1rem;
         }
         
-        .content {
-            margin: 2rem 0;
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
-        .feature-list {
-            list-style: none;
-            padding: 0;
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
         }
         
-        .feature-list li {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem 1.5rem;
-            margin-bottom: 1rem;
+        .client-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .client-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
             border-radius: 10px;
-            border-left: 4px solid #ffd700;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .client-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .client-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .client-card p {
+            opacity: 0.9;
+            margin: 0.3rem 0;
+        }
+        
+        .assessment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .assessment-table th,
+        .assessment-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .assessment-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .assessment-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: #ffd700;
+            color: #333;
+            font-weight: bold;
         }
         
         .back-button {
             display: inline-block;
-            margin-top: 2rem;
             padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
             text-decoration: none;
             border-radius: 10px;
-            transition: background 0.3s ease;
             font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
         }
         
         .back-button:hover {
-            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .empty-state p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -89,23 +153,64 @@
     <div class="container">
         <div class="header">
             <h1>📊 進捗管理</h1>
-            <p>利用者の進捗状況をリアルタイムで追跡</p>
+            <p>利用者の進捗状況をリアルタイムで追跡・管理</p>
         </div>
         
-        <div class="content">
-            <h2 style="margin-bottom: 1rem;">主な機能</h2>
-            <ul class="feature-list">
-                <li>📈 リアルタイムでの進捗状況の可視化</li>
-                <li>📋 個別ケアプランの管理と更新</li>
-                <li>🎯 目標設定と達成度の追跡</li>
-                <li>📊 データ駆動型の分析レポート</li>
-                <li>🔔 重要な変更の通知機能</li>
-                <li>📱 モバイル対応で外出先からも確認可能</li>
-            </ul>
-            
-            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0, 255, 0, 0.1); border-radius: 10px; border: 1px solid rgba(0, 255, 0, 0.3);">
-                <p style="font-size: 1.1rem;">💡 <strong>ヒント:</strong> この機能は現在開発中です。完成後、利用者の詳細な進捗データを確認できるようになります。</p>
-            </div>
+        <!-- 利用者一覧セクション -->
+        <div class="section">
+            <h2>👥 登録利用者一覧</h2>
+            {% if clients %}
+                <div class="client-grid">
+                    {% for client in clients %}
+                    <div class="client-card">
+                        <h3>{{ client.full_name }}</h3>
+                        <p>📋 利用者コード: {{ client.client_code }}</p>
+                        <p>🎂 生年月日: {{ client.birth_date|date:"Y年m月d日" }}</p>
+                        <p>👨‍👩‍👧 保護者: {{ client.guardian_name|default:"未設定" }}</p>
+                        <p>🎯 長期目標: {{ client.long_term_goal|truncatewords:10|default:"未設定" }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>📭 登録されている利用者がいません</p>
+                    <p>管理画面から利用者を追加してください</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- 進捗評価データセクション -->
+        <div class="section">
+            <h2>📈 進捗評価データ</h2>
+            {% if assessments %}
+                <table class="assessment-table">
+                    <thead>
+                        <tr>
+                            <th>評価日</th>
+                            <th>利用者</th>
+                            <th>担当職員</th>
+                            <th>成長スコア</th>
+                            <th>専門職コメント</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for assessment in assessments %}
+                        <tr>
+                            <td>{{ assessment.assessment_date|date:"Y年m月d日" }}</td>
+                            <td>{{ assessment.client.full_name }}</td>
+                            <td>{{ assessment.staff.full_name|default:"未割当" }}</td>
+                            <td><span class="score-badge">{{ assessment.progress_score }}</span></td>
+                            <td>{{ assessment.specialist_comment|truncatewords:15|default:"コメントなし" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <p>📭 進捗評価データがありません</p>
+                    <p>管理画面から進捗評価を追加してください</p>
+                </div>
+            {% endif %}
         </div>
         
         <a href="/" class="back-button">← ホームに戻る</a>
