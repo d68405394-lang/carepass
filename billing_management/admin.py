@@ -126,7 +126,7 @@ class StaffAdmin(admin.ModelAdmin):
 @admin.register(WorkRecord)
 class WorkRecordAdmin(admin.ModelAdmin):
     """勤務記録の管理画面設定"""
-    list_display = ('staff', 'work_date', 'start_time', 'end_time', 'work_hours')
+    list_display = ('staff', 'work_date', 'service_type', 'duration_minutes')
     list_filter = ('work_date', 'staff__location')
     search_fields = ('staff__full_name', 'staff__staff_code')
     date_hierarchy = 'work_date'
@@ -147,8 +147,8 @@ class WorkRecordAdmin(admin.ModelAdmin):
 @admin.register(ProgressAssessment)
 class ProgressAssessmentAdmin(admin.ModelAdmin):
     """経過記録の管理画面設定"""
-    list_display = ('client', 'assessment_date', 'assessor', 'overall_rating')
-    list_filter = ('assessment_date', 'overall_rating', 'client__location')
+    list_display = ('client', 'assessment_date')
+    list_filter = ('assessment_date', 'client__location')
     search_fields = ('client__full_name', 'assessor')
     date_hierarchy = 'assessment_date'
     ordering = ('-assessment_date',)
