@@ -116,6 +116,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Custom User Model (マルチテナント対応)
+AUTH_USER_MODEL = 'billing_management.CustomUser'
+
 
 # Reactのデフォルトの稼働ポートを指定
 CORS_ALLOWED_ORIGINS = [

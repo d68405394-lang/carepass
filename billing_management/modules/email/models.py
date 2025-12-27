@@ -2,7 +2,7 @@
 メール機能のデータモデル
 """
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from billing_management.models import Client
 
 
@@ -20,7 +20,7 @@ class EmailMessage(models.Model):
         ('failed', '送信失敗'),
     ]
     
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_emails', verbose_name='送信者')
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_emails', verbose_name='送信者')
     subject = models.CharField(max_length=200, verbose_name='件名')
     body = models.TextField(verbose_name='本文')
     message_type = models.CharField(max_length=20, choices=MESSAGE_TYPE_CHOICES, default='individual', verbose_name='メッセージタイプ')

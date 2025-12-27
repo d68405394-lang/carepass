@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # ProgressAssessmentの前提となるClientモデルを定義
 class Client(models.Model):
@@ -10,6 +11,9 @@ class Client(models.Model):
     recipient_number = models.CharField(max_length=20, blank=True, verbose_name="受給者番号")
     guardian_name = models.CharField(max_length=100, blank=True, verbose_name="保護者氏名")
     guardian_email = models.EmailField(blank=True, verbose_name="保護者メールアドレス")
+    
+    # 所属事業所（マルチテナント対応）
+    location = models.ForeignKey('ServiceLocation', on_delete=models.PROTECT, null=True, verbose_name="所属事業所")
     
     # 支援目標（個別支援計画書の核心）
     long_term_goal = models.TextField(blank=True, verbose_name="長期目標")
@@ -26,9 +30,44 @@ class Client(models.Model):
         
     def __str__(self):
         return f"{self.full_name} ({self.client_code})"
-from django.contrib.auth.models import User
 from datetime import timedelta
 from django.core.exceptions import ValidationError
+
+# カスタムユーザーモデル（マルチテナント対応）
+class CustomUser(AbstractUser):
+    """カスタムユーザーモデル - 事業所との紐付けと権限管理"""
+    
+    ROLE_CHOICES = [
+        ('super_admin', 'スーパー管理者'),  # 全事業所を管理
+        ('location_admin', '事業所管理者'),  # 自分の事業所のみ管理
+        ('staff', '一般スタッフ'),  # 自分の事業所のみ閲覧・入力
+    ]
+    
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='staff', verbose_name="役割")
+    location = models.ForeignKey('ServiceLocation', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="所属事業所")
+    
+    class Meta:
+        verbose_name = "ユーザー"
+        verbose_name_plural = "ユーザー"
+    
+    def __str__(self):
+        return f"{self.username} ({self.get_role_display()})"
+    
+    def is_super_admin(self):
+        """スーパー管理者かどうか"""
+        return self.role == 'super_admin' or self.is_superuser
+    
+    def is_location_admin(self):
+        """事業所管理者かどうか"""
+        return self.role == 'location_admin'
+    
+    def can_manage_location(self, location):
+        """指定された事業所を管理できるか"""
+        if self.is_super_admin():
+            return True
+        if self.is_location_admin() and self.location == location:
+            return True
+        return False
 
 # 1. 事業所マスタ (多店舗展開に対応)
 class ServiceLocation(models.Model):

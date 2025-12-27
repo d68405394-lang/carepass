@@ -2,14 +2,14 @@
 保護者向けポータルのデータモデル
 """
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from billing_management.models import Client
 
 
 class GuardianUser(models.Model):
     """保護者ユーザーモデル"""
     
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='guardian_profile', verbose_name='ユーザー')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='guardian_profile', verbose_name='ユーザー')
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='guardians', verbose_name='利用者')
     phone_number = models.CharField(max_length=20, blank=True, verbose_name='電話番号')
     relationship = models.CharField(max_length=50, default='保護者', verbose_name='続柄')
