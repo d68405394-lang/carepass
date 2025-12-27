@@ -177,9 +177,9 @@ class Command(BaseCommand):
                 }
             )
             if created:
-                self.stdout.write(f"   ✅ {client.name} ({client.location.location_name}) を作成しました")
+                self.stdout.write(f"   ✅ {client.full_name} ({client.location.location_name}) を作成しました")
             else:
-                self.stdout.write(f"   ℹ️  {client.name} は既に存在します")
+                self.stdout.write(f"   ℹ️  {client.full_name} は既に存在します")
         
         # サンプル職員を作成
         self.stdout.write("\n👨‍💼 サンプル職員を作成中...")
@@ -199,9 +199,9 @@ class Command(BaseCommand):
                 }
             )
             if created:
-                self.stdout.write(f"   ✅ {staff.name} ({staff.location.location_name}) を作成しました")
+                self.stdout.write(f"   ✅ {staff.full_name} ({staff.location.location_name}) を作成しました")
             else:
-                self.stdout.write(f"   ℹ️  {staff.name} は既に存在します")
+                self.stdout.write(f"   ℹ️  {staff.full_name} は既に存在します")
         
         self.stdout.write("\n" + "=" * 60)
         self.stdout.write("✅ サンプルデータの投入が完了しました！")
