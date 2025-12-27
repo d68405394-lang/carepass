@@ -58,16 +58,9 @@ def guardian(request):
     clients = Client.objects.all()
     assessments = ProgressAssessment.objects.select_related('client', 'staff').order_by('-assessment_date')
     
-    # 利用者ごとに最新の評価をグループ化
-    from collections import defaultdict
-    client_reports = defaultdict(list)
-    
-    for assessment in assessments:
-        client_reports[assessment.client.client_code].append(assessment)
-    
     context = {
         'clients': clients,
-        'client_reports': dict(client_reports),
+        'client_reports': assessments,
     }
     return render(request, 'guardian.html', context)
 

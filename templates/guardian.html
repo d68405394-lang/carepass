@@ -213,24 +213,22 @@
                             <div class="value">{{ client.support_content|default:"未設定" }}</div>
                         </div>
                         
-                        {% if client_reports %}
-                            {% with reports=client_reports|get_item:client.client_code %}
-                                {% if reports %}
-                                <div class="assessment-list">
-                                    <h4 style="color: #667eea; margin-bottom: 1rem;">📈 最近の評価記録</h4>
-                                    {% for assessment in reports|slice:":5" %}
-                                    <div class="assessment-item">
-                                        <div class="date">{{ assessment.assessment_date|date:"Y年m月d日" }}</div>
-                                        <div class="score">成長スコア: {{ assessment.progress_score }}</div>
-                                        <div class="comment">
-                                            <strong>担当:</strong> {{ assessment.staff.full_name|default:"未割当" }}<br>
-                                            <strong>コメント:</strong> {{ assessment.specialist_comment|default:"コメントなし" }}
-                                        </div>
+                        {% if client.id in client_reports %}
+                        <div class="assessment-list">
+                            <h4 style="color: #667eea; margin-bottom: 1rem;">📈 最近の評価記録</h4>
+                            {% for assessment in client_reports|slice:":5" %}
+                                {% if assessment.client.id == client.id %}
+                                <div class="assessment-item">
+                                    <div class="date">{{ assessment.assessment_date|date:"Ｙ年m月d日" }}</div>
+                                    <div class="score">成長スコア: {{ assessment.progress_score }}</div>
+                                    <div class="comment">
+                                        <strong>担当:</strong> {{ assessment.staff.full_name|default:"未割当" }}<br>
+                                        <strong>コメント:</strong> {{ assessment.specialist_comment|default:"コメントなし" }}
                                     </div>
-                                    {% endfor %}
                                 </div>
                                 {% endif %}
-                            {% endwith %}
+                            {% endfor %}
+                        </div>
                         {% endif %}
                     </div>
                     {% endfor %}
