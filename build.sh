@@ -79,6 +79,10 @@ else:
 print('👤 管理者ユーザー作成処理完了')
 EOF
 
+echo ""
+echo "📊 サンプルデータの投入..."
+python load_sample_data.py
+
 echo "🎉 ビルドが正常に完了しました！"
 echo "📱 アプリケーションにアクセス: https://carepass.onrender.com/"
 echo "🔧 管理画面にアクセス: https://carepass.onrender.com/admin/"
