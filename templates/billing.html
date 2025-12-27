@@ -112,13 +112,26 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 1rem;
+            display: block;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .work-table thead,
+        .work-table tbody,
+        .work-table tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
         }
         
         .work-table th,
         .work-table td {
-            padding: 1rem;
+            padding: 0.8rem 0.5rem;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            font-size: 0.9rem;
+            word-wrap: break-word;
         }
         
         .work-table th {
@@ -129,6 +142,18 @@
         
         .work-table tr:hover {
             background: #f5f5f5;
+        }
+        
+        @media (max-width: 768px) {
+            .work-table {
+                font-size: 0.85rem;
+            }
+            
+            .work-table th,
+            .work-table td {
+                padding: 0.6rem 0.3rem;
+                font-size: 0.8rem;
+            }
         }
         
         .back-button {
