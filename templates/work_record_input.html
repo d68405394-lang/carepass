@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勤務時間記録 - Care Pass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .time-presets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .preset-btn {
+            padding: 0.8rem;
+            background: #f0f0f0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .preset-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .messages {
+            margin-bottom: 1rem;
+        }
+        
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196f3;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .info-box p {
+            color: #0d47a1;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⏰ 勤務時間記録</h1>
+            <p>日々の勤務実績を記録</p>
+        </div>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="form-container">
+            <div class="info-box">
+                <p>💡 勤務時間は「分」単位で入力してください（例: 4時間 = 240分）</p>
+            </div>
+            
+            <form method="POST" id="workRecordForm">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="staff_id">👨‍💼 職員名</label>
+                    <select name="staff_id" id="staff_id" required>
+                        <option value="">選択してください</option>
+                        {% for staff in staff_list %}
+                        <option value="{{ staff.id }}">{{ staff.full_name }} ({{ staff.staff_code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="work_date">📅 勤務日</label>
+                    <input type="date" name="work_date" id="work_date" value="{{ today|date:'Y-m-d' }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="service_type">🏢 サービス種別</label>
+                    <select name="service_type" id="service_type" required>
+                        <option value="">選択してください</option>
+                        <option value="Hodei">放課後等デイサービス</option>
+                        <option value="Jido">児童発達支援</option>
+                        <option value="MiniReha">ミニリハ</option>
+                        <option value="Sodan">相談支援</option>
+                        <option value="Other">その他</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="duration_minutes">⏱️ 勤務時間（分）</label>
+                    <input type="number" name="duration_minutes" id="duration_minutes" min="1" placeholder="例: 240（4時間）" required>
+                    <div class="time-presets">
+                        <button type="button" class="preset-btn" data-minutes="120">2時間</button>
+                        <button type="button" class="preset-btn" data-minutes="180">3時間</button>
+                        <button type="button" class="preset-btn" data-minutes="240">4時間</button>
+                        <button type="button" class="preset-btn" data-minutes="300">5時間</button>
+                        <button type="button" class="preset-btn" data-minutes="360">6時間</button>
+                        <button type="button" class="preset-btn" data-minutes="480">8時間</button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">💾 保存する</button>
+            </form>
+            
+            <a href="/" class="back-button">← ホームに戻る</a>
+        </div>
+    </div>
+    
+    <script>
+        // 時間プリセットボタン
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('duration_minutes').value = this.dataset.minutes;
+            });
+        });
+    </script>
+</body>
+</html>

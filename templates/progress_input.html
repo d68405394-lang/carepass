@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>進捗記録入力 - Care Pass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .form-group select,
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group select:focus,
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .voice-input-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: stretch;
+        }
+        
+        .voice-input-container textarea {
+            flex: 1;
+        }
+        
+        .voice-btn {
+            padding: 0.8rem 1.5rem;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .voice-btn:hover {
+            background: #ff5252;
+        }
+        
+        .voice-btn.listening {
+            background: #51cf66;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .score-selector {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: space-between;
+        }
+        
+        .score-btn {
+            flex: 1;
+            padding: 1rem;
+            background: #f0f0f0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .score-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .messages {
+            margin-bottom: 1rem;
+        }
+        
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 進捗記録入力</h1>
+            <p>利用者の日々の成長を記録</p>
+        </div>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="form-container">
+            <form method="POST" id="progressForm">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="client_id">👤 利用者</label>
+                    <select name="client_id" id="client_id" required>
+                        <option value="">選択してください</option>
+                        {% for client in clients %}
+                        <option value="{{ client.id }}">{{ client.full_name }} ({{ client.client_code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="staff_id">👨‍⚕️ 担当職員</label>
+                    <select name="staff_id" id="staff_id">
+                        <option value="">選択してください</option>
+                        {% for staff in staff_list %}
+                        <option value="{{ staff.id }}">{{ staff.full_name }} ({{ staff.staff_code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="assessment_date">📅 評価日</label>
+                    <input type="date" name="assessment_date" id="assessment_date" value="{{ today|date:'Y-m-d' }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>⭐ 成長スコア（1-5段階）</label>
+                    <input type="hidden" name="progress_score" id="progress_score" value="">
+                    <div class="score-selector">
+                        <button type="button" class="score-btn" data-score="1">1</button>
+                        <button type="button" class="score-btn" data-score="2">2</button>
+                        <button type="button" class="score-btn" data-score="3">3</button>
+                        <button type="button" class="score-btn" data-score="4">4</button>
+                        <button type="button" class="score-btn" data-score="5">5</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialist_comment">💬 専門職コメント</label>
+                    <div class="voice-input-container">
+                        <textarea name="specialist_comment" id="specialist_comment" placeholder="今日の様子や成長の記録を入力してください..."></textarea>
+                        <button type="button" class="voice-btn" id="voiceBtn" title="音声入力">🎤</button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">💾 保存する</button>
+            </form>
+            
+            <a href="/" class="back-button">← ホームに戻る</a>
+        </div>
+    </div>
+    
+    <script>
+        // スコア選択
+        document.querySelectorAll('.score-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                document.getElementById('progress_score').value = this.dataset.score;
+            });
+        });
+        
+        // 音声入力
+        const voiceBtn = document.getElementById('voiceBtn');
+        const commentField = document.getElementById('specialist_comment');
+        
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'ja-JP';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            
+            voiceBtn.addEventListener('click', function() {
+                if (voiceBtn.classList.contains('listening')) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                    voiceBtn.classList.add('listening');
+                }
+            });
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                commentField.value += (commentField.value ? ' ' : '') + transcript;
+                voiceBtn.classList.remove('listening');
+            };
+            
+            recognition.onerror = function(event) {
+                console.error('音声認識エラー:', event.error);
+                voiceBtn.classList.remove('listening');
+                alert('音声認識に失敗しました。もう一度お試しください。');
+            };
+            
+            recognition.onend = function() {
+                voiceBtn.classList.remove('listening');
+            };
+        } else {
+            voiceBtn.style.display = 'none';
+            console.log('このブラウザは音声認識に対応していません');
+        }
+        
+        // フォーム送信前のバリデーション
+        document.getElementById('progressForm').addEventListener('submit', function(e) {
+            const score = document.getElementById('progress_score').value;
+            if (!score) {
+                e.preventDefault();
+                alert('成長スコアを選択してください');
+            }
+        });
+    </script>
+</body>
+</html>

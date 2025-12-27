@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from billing_management.models import Client, ProgressAssessment, Staff, WorkRecord
+from datetime import date
 
 def home(request):
     """ランディングページ"""
@@ -68,3 +70,76 @@ def guardian(request):
         'client_reports': dict(client_reports),
     }
     return render(request, 'guardian.html', context)
+
+def progress_input(request):
+    """進捗記録入力フォーム"""
+    if request.method == 'POST':
+        # フォームデータを取得
+        client_id = request.POST.get('client_id')
+        staff_id = request.POST.get('staff_id')
+        assessment_date = request.POST.get('assessment_date')
+        progress_score = request.POST.get('progress_score')
+        specialist_comment = request.POST.get('specialist_comment')
+        
+        # データを保存
+        try:
+            client = Client.objects.get(id=client_id)
+            staff = Staff.objects.get(id=staff_id) if staff_id else None
+            
+            ProgressAssessment.objects.create(
+                client=client,
+                staff=staff,
+                assessment_date=assessment_date,
+                progress_score=progress_score,
+                specialist_comment=specialist_comment
+            )
+            messages.success(request, '✅ 進捗記録を保存しました')
+            return redirect('progress_input')
+        except Exception as e:
+            messages.error(request, f'❌ エラーが発生しました: {str(e)}')
+    
+    # フォーム表示用のデータ
+    clients = Client.objects.all()
+    staff_list = Staff.objects.all()
+    today = date.today()
+    
+    context = {
+        'clients': clients,
+        'staff_list': staff_list,
+        'today': today,
+    }
+    return render(request, 'progress_input.html', context)
+
+def work_record_input(request):
+    """勤務時間記録入力フォーム"""
+    if request.method == 'POST':
+        # フォームデータを取得
+        staff_id = request.POST.get('staff_id')
+        work_date = request.POST.get('work_date')
+        service_type = request.POST.get('service_type')
+        duration_minutes = request.POST.get('duration_minutes')
+        
+        # データを保存
+        try:
+            staff = Staff.objects.get(id=staff_id)
+            
+            WorkRecord.objects.create(
+                staff=staff,
+                work_date=work_date,
+                service_type=service_type,
+                duration_minutes=duration_minutes
+            )
+            messages.success(request, '✅ 勤務記録を保存しました')
+            return redirect('work_record_input')
+        except Exception as e:
+            messages.error(request, f'❌ エラーが発生しました: {str(e)}')
+    
+    # フォーム表示用のデータ
+    staff_list = Staff.objects.all()
+    today = date.today()
+    
+    context = {
+        'staff_list': staff_list,
+        'today': today,
+    }
+    return render(request, 'work_record_input.html', context)
