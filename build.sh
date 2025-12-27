@@ -81,7 +81,7 @@ EOF
 
 echo ""
 echo "📊 サンプルデータの投入..."
-python load_sample_data.py
+python manage.py load_sample_data
 
 echo "🎉 ビルドが正常に完了しました！"
 echo "📱 アプリケーションにアクセス: https://carepass.onrender.com/"
