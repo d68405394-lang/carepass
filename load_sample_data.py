@@ -28,7 +28,7 @@ def load_sample_data():
     # サンプル事業所を作成（Staffモデルに必要）
     print("\n🏢 サンプル事業所を作成中...")
     sample_location, created = ServiceLocation.objects.get_or_create(
-        location_id='SAMPLE_LOC01',
+        location_id='SAMPLE01',
         defaults={
             'location_name': 'サンプル事業所'
         }
