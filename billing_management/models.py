@@ -193,6 +193,40 @@ class ProgressAssessment(models.Model):
     ai_feedback = models.TextField(blank=True, verbose_name="AI改善提案")
     analyzed_at = models.DateTimeField(null=True, blank=True, verbose_name="AI分析日時")
     
+    def save(self, *args, **kwargs):
+        """
+        保存時に自動的にAI分析を実行
+        """
+        # 専門職コメントが入力されている場合のみAI分析を実行
+        if self.specialist_comment and self.specialist_comment.strip():
+            try:
+                from .ai_utils import analyze_sentiment
+                from django.utils import timezone
+                
+                # AI分析を実行
+                result = analyze_sentiment(
+                    self,
+                    user=getattr(self, '_current_user', None),
+                    location=self.client.location
+                )
+                
+                # 結果をモデルに反映
+                self.sentiment_score = result.get('sentiment_score')
+                self.record_quality_score = result.get('record_quality_score')
+                self.nlp_keyword_tags = result.get('keywords', '')
+                self.ai_feedback = result.get('feedback', '')
+                self.analyzed_at = timezone.now()
+                self.analysis_result_json = result
+                
+            except Exception as e:
+                # AI分析に失敗しても保存は続行
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"AI分析エラー: {str(e)}")
+        
+        # 通常の保存処理
+        super().save(*args, **kwargs)
+    
     class Meta:
         verbose_name = "進捗・評価"
         verbose_name_plural = "進捗・評価"
