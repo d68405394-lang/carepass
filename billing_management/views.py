@@ -882,3 +882,20 @@ from .modules.portal.views import GuardianLoginView, GuardianLogoutView, Guardia
 
 # ゲーミフィケーションのインポート
 from .modules.gamification.views import ClientBadgesView, CheckBadgesView, ClientPointsView, AwardPointsView, LeaderboardView
+
+
+# 事業所一覧 API
+class ServiceLocationListView(APIView):
+    """事業所一覧を取得するAPI"""
+    
+    def get(self, request):
+        locations = ServiceLocation.objects.all()
+        data = [
+            {
+                'id': loc.id,
+                'location_id': loc.location_id,
+                'name': loc.location_name,
+            }
+            for loc in locations
+        ]
+        return Response(data)

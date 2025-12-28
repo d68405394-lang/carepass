@@ -68,4 +68,7 @@ urlpatterns = [
     path('gamification/points/<int:client_id>/', views.ClientPointsView.as_view(), name='client_points'),
     path('gamification/award_points/<int:client_id>/', views.AwardPointsView.as_view(), name='award_points'),
     path('gamification/leaderboard/', views.LeaderboardView.as_view(), name='leaderboard'),
+    
+    # 事業所一覧 API (事故報告書用)
+    path('service-locations/', views.ServiceLocationListView.as_view(), name='service_location_list'),
 ]

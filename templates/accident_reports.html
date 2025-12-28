@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事故・ヒヤリハット報告書 - Care Pass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                        sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .header-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .header-nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+        
+        .header-nav a:hover {
+            opacity: 1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title h1 {
+            font-size: 1.8rem;
+            color: #333;
+        }
+        
+        .page-title p {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .filter-group label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .report-table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .report-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .report-table th,
+        .report-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .report-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .report-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-draft {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .type-accident {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .type-hiyari {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        /* モーダル */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h2 {
+            color: #333;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .ai-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid #e9ecef;
+        }
+        
+        .ai-section h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .ai-result {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid #ddd;
+        }
+        
+        .ai-result h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .ai-result p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            color: #667eea;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .history-list {
+            list-style: none;
+        }
+        
+        .history-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .history-content h4 {
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+        
+        .history-content p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="header-logo">🏥 Care Pass</a>
+        <nav class="header-nav">
+            <a href="/">ホーム</a>
+            <a href="/statutory-documents/">法定書類</a>
+            <a href="/progress/">進捗管理</a>
+            <a href="/billing/">請求管理</a>
+        </nav>
+    </div>
+    
+    <div class="container">
+        <div class="page-header">
+            <div class="page-title">
+                <h1>⚠️ 事故・ヒヤリハット報告書</h1>
+                <p>事故発生時の報告書をAIが自動生成します</p>
+            </div>
+            <button class="btn btn-primary" onclick="openCreateModal()">
+                ＋ 新規作成
+            </button>
+        </div>
+        
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>区分</label>
+                    <select id="filter-type">
+                        <option value="">すべて</option>
+                        <option value="accident">事故</option>
+                        <option value="hiyari_hatto">ヒヤリハット</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>ステータス</label>
+                    <select id="filter-status">
+                        <option value="">すべて</option>
+                        <option value="draft">作成中</option>
+                        <option value="pending_review">承認待ち</option>
+                        <option value="approved">承認済み</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>期間</label>
+                    <input type="date" id="filter-date-from">
+                </div>
+                <div class="filter-group">
+                    <label>〜</label>
+                    <input type="date" id="filter-date-to">
+                </div>
+                <button class="btn btn-secondary" onclick="applyFilters()">検索</button>
+            </div>
+        </div>
+        
+        <div class="report-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>区分</th>
+                        <th>発生日時</th>
+                        <th>利用者名</th>
+                        <th>報告者</th>
+                        <th>ステータス</th>
+                        <th>行政報告</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="report-list">
+                    <!-- データはJavaScriptで動的に挿入 -->
+                </tbody>
+            </table>
+            
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <h3>📋 報告書がありません</h3>
+                <p>「新規作成」ボタンから最初の報告書を作成してください</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 新規作成モーダル -->
+    <div class="modal" id="create-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📝 新規報告書作成</h2>
+                <button class="modal-close" onclick="closeModal('create-modal')">&times;</button>
+            </div>
+            
+            <form id="create-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>区分 *</label>
+                        <select name="report_type" required>
+                            <option value="">選択してください</option>
+                            <option value="accident">事故</option>
+                            <option value="hiyari_hatto">ヒヤリハット</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>発生日時 *</label>
+                        <input type="datetime-local" name="occurred_at" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>利用者 *</label>
+                        <select name="client" required id="client-select">
+                            <option value="">選択してください</option>
+                            <!-- 動的に挿入 -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>発生場所（事業所） *</label>
+                        <select name="location" required id="location-select">
+                            <option value="">選択してください</option>
+                            <!-- 動的に挿入 -->
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>サービス種別 *</label>
+                        <select name="service_type" required>
+                            <option value="">選択してください</option>
+                            <option value="houmon_kaigo">訪問介護</option>
+                            <option value="houmon_kango">訪問看護</option>
+                            <option value="day_service">通所介護（デイサービス）</option>
+                            <option value="day_care">通所リハビリテーション（デイケア）</option>
+                            <option value="short_stay">短期入所生活介護（ショートステイ）</option>
+                            <option value="group_home">認知症対応型共同生活介護（グループホーム）</option>
+                            <option value="houdehi">放課後等デイサービス</option>
+                            <option value="jihatsu">児童発達支援</option>
+                            <option value="other">その他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>発生場所（詳細）</label>
+                        <input type="text" name="location_detail" placeholder="例: 居室内、廊下、トイレ">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>事実経過（何が起きたか）*</label>
+                    <textarea name="incident_description" placeholder="発生時の状況を時系列で記載してください。音声入力も可能です。" required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>利用者の状態</label>
+                        <textarea name="client_state" placeholder="発生時・発生後の利用者の状態"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>被害の状況</label>
+                        <textarea name="damage_status" placeholder="怪我の有無、程度、部位など"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>初期対応</label>
+                    <textarea name="initial_response" placeholder="発生直後に行った対応"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>家族への連絡状況</label>
+                        <textarea name="family_contact_log" placeholder="連絡日時、連絡先、連絡内容"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>医療機関への対応</label>
+                        <textarea name="medical_response" placeholder="受診の有無、医療機関名、診断内容"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('create-modal')">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">保存して次へ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 詳細モーダル -->
+    <div class="modal" id="detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📋 報告書詳細</h2>
+                <button class="modal-close" onclick="closeModal('detail-modal')">&times;</button>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="basic">基本情報</div>
+                <div class="tab" data-tab="ai">AI生成</div>
+                <div class="tab" data-tab="history">履歴</div>
+            </div>
+            
+            <div class="tab-content active" id="tab-basic">
+                <div id="detail-content">
+                    <!-- 動的に挿入 -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="tab-ai">
+                <div class="ai-section">
+                    <h3>🤖 AI自動生成</h3>
+                    <p>入力された事実情報を基に、AIが報告書の各項目を自動生成します。</p>
+                    <button class="btn btn-primary" id="generate-ai-btn" onclick="generateAI()">
+                        AI生成を実行
+                    </button>
+                    
+                    <div class="loading" id="ai-loading">
+                        <div class="spinner"></div>
+                        <p>AIが報告書を生成中...</p>
+                    </div>
+                    
+                    <div id="ai-results">
+                        <!-- AI生成結果が挿入される -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="tab-history">
+                <h3>📜 変更履歴</h3>
+                <ul class="history-list" id="history-list">
+                    <!-- 動的に挿入 -->
+                </ul>
+            </div>
+            
+            <div class="form-actions" id="detail-actions">
+                <!-- 動的に挿入 -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentReportId = null;
+        
+        // ページ読み込み時
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReports();
+            loadClients();
+            loadLocations();
+            setupTabs();
+        });
+        
+        // タブ切り替え
+        function setupTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById('tab-' + tabId).classList.add('active');
+                });
+            });
+        }
+        
+        // 報告書一覧を読み込み
+        async function loadReports() {
+            try {
+                const response = await fetch('/api/accident-reports/');
+                if (response.ok) {
+                    const reports = await response.json();
+                    renderReports(reports);
+                } else {
+                    console.error('Failed to load reports');
+                }
+            } catch (error) {
+                console.error('Error loading reports:', error);
+            }
+        }
+        
+        // 報告書一覧を描画
+        function renderReports(reports) {
+            const tbody = document.getElementById('report-list');
+            const emptyState = document.getElementById('empty-state');
+            
+            if (reports.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            tbody.innerHTML = reports.map((report, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>
+                        <span class="type-badge type-${report.report_type === 'accident' ? 'accident' : 'hiyari'}">
+                            ${report.report_type_display}
+                        </span>
+                    </td>
+                    <td>${formatDateTime(report.occurred_at)}</td>
+                    <td>${report.client_name}</td>
+                    <td>${report.reporter_name}</td>
+                    <td>
+                        <span class="status-badge status-${report.status}">
+                            ${report.status_display}
+                        </span>
+                    </td>
+                    <td>${report.is_government_report_needed ? '⚠️ 要' : '－'}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn btn-primary" onclick="openDetailModal(${report.id})">詳細</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // 日時フォーマット
+        function formatDateTime(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleString('ja-JP', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        // 利用者一覧を読み込み
+        async function loadClients() {
+            try {
+                const response = await fetch('/api/clients/');
+                if (response.ok) {
+                    const clients = await response.json();
+                    const select = document.getElementById('client-select');
+                    clients.forEach(client => {
+                        const option = document.createElement('option');
+                        option.value = client.id;
+                        option.textContent = client.full_name;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading clients:', error);
+            }
+        }
+        
+        // 事業所一覧を読み込み
+        async function loadLocations() {
+            try {
+                const response = await fetch('/api/service-locations/');
+                if (response.ok) {
+                    const locations = await response.json();
+                    const select = document.getElementById('location-select');
+                    locations.forEach(location => {
+                        const option = document.createElement('option');
+                        option.value = location.id;
+                        option.textContent = location.name;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading locations:', error);
+            }
+        }
+        
+        // 新規作成モーダルを開く
+        function openCreateModal() {
+            document.getElementById('create-modal').classList.add('active');
+        }
+        
+        // モーダルを閉じる
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // 詳細モーダルを開く
+        async function openDetailModal(reportId) {
+            currentReportId = reportId;
+            
+            try {
+                const response = await fetch(`/api/accident-reports/${reportId}/`);
+                if (response.ok) {
+                    const report = await response.json();
+                    renderDetailContent(report);
+                    loadHistory(reportId);
+                    document.getElementById('detail-modal').classList.add('active');
+                }
+            } catch (error) {
+                console.error('Error loading report detail:', error);
+            }
+        }
+        
+        // 詳細内容を描画
+        function renderDetailContent(report) {
+            const content = document.getElementById('detail-content');
+            content.innerHTML = `
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>区分</label>
+                        <p>${report.report_type_display}</p>
+                    </div>
+                    <div class="form-group">
+                        <label>発生日時</label>
+                        <p>${formatDateTime(report.occurred_at)}</p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>利用者</label>
+                        <p>${report.client_name}</p>
+                    </div>
+                    <div class="form-group">
+                        <label>発生場所</label>
+                        <p>${report.location_name} - ${report.location_detail || ''}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>事実経過</label>
+                    <p>${report.incident_description || '（記載なし）'}</p>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>利用者の状態</label>
+                        <p>${report.client_state || '（記載なし）'}</p>
+                    </div>
+                    <div class="form-group">
+                        <label>被害の状況</label>
+                        <p>${report.damage_status || '（記載なし）'}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>初期対応</label>
+                    <p>${report.initial_response || '（記載なし）'}</p>
+                </div>
+            `;
+            
+            // AI生成結果を表示
+            const aiResults = document.getElementById('ai-results');
+            if (report.ai_generated_overview) {
+                aiResults.innerHTML = `
+                    <div class="ai-result">
+                        <h4>📝 事故の状況（AI生成）</h4>
+                        <p>${report.ai_generated_overview}</p>
+                    </div>
+                    <div class="ai-result">
+                        <h4>🔍 原因分析（AI生成）</h4>
+                        <p>${report.ai_generated_cause_analysis}</p>
+                    </div>
+                    <div class="ai-result">
+                        <h4>🛡️ 再発防止策（AI生成）</h4>
+                        <p>${report.ai_generated_prevention_plan}</p>
+                    </div>
+                    <div class="ai-result">
+                        <h4>📋 行政報告要否</h4>
+                        <p><strong>${report.is_government_report_needed ? '⚠️ 報告が必要' : '報告不要'}</strong></p>
+                        <p>${report.government_report_reason}</p>
+                    </div>
+                `;
+            } else {
+                aiResults.innerHTML = '<p>AI生成はまだ実行されていません。「AI生成を実行」ボタンを押してください。</p>';
+            }
+            
+            // アクションボタンを更新
+            const actions = document.getElementById('detail-actions');
+            let buttons = '';
+            
+            if (report.status === 'draft') {
+                buttons += `<button class="btn btn-primary" onclick="generateAI()">AI生成</button>`;
+                buttons += `<button class="btn btn-success" onclick="submitForReview()">承認申請</button>`;
+            } else if (report.status === 'pending_review') {
+                buttons += `<button class="btn btn-success" onclick="approveReport()">承認</button>`;
+                buttons += `<button class="btn btn-warning" onclick="rejectReport()">差戻し</button>`;
+            }
+            
+            buttons += `<button class="btn btn-secondary" onclick="downloadPDF()">PDF出力</button>`;
+            buttons += `<button class="btn btn-secondary" onclick="closeModal('detail-modal')">閉じる</button>`;
+            
+            actions.innerHTML = buttons;
+        }
+        
+        // 履歴を読み込み
+        async function loadHistory(reportId) {
+            try {
+                const response = await fetch(`/api/accident-reports/${reportId}/audit_trails/`);
+                if (response.ok) {
+                    const trails = await response.json();
+                    const list = document.getElementById('history-list');
+                    list.innerHTML = trails.map(trail => `
+                        <li class="history-item">
+                            <div class="history-icon">📝</div>
+                            <div class="history-content">
+                                <h4>${trail.action_display}</h4>
+                                <p>${trail.user_name} - ${formatDateTime(trail.timestamp)}</p>
+                            </div>
+                        </li>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading history:', error);
+            }
+        }
+        
+        // AI生成を実行
+        async function generateAI() {
+            if (!currentReportId) return;
+            
+            document.getElementById('ai-loading').classList.add('active');
+            document.getElementById('generate-ai-btn').disabled = true;
+            
+            try {
+                const response = await fetch(`/api/accident-reports/${currentReportId}/generate_ai/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    const report = await response.json();
+                    renderDetailContent(report);
+                    alert('AI生成が完了しました');
+                } else {
+                    alert('AI生成に失敗しました');
+                }
+            } catch (error) {
+                console.error('Error generating AI:', error);
+                alert('AI生成中にエラーが発生しました');
+            } finally {
+                document.getElementById('ai-loading').classList.remove('active');
+                document.getElementById('generate-ai-btn').disabled = false;
+            }
+        }
+        
+        // 承認申請
+        async function submitForReview() {
+            if (!currentReportId) return;
+            
+            try {
+                const response = await fetch(`/api/accident-reports/${currentReportId}/submit_for_review/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    alert('承認申請しました');
+                    closeModal('detail-modal');
+                    loadReports();
+                } else {
+                    alert('承認申請に失敗しました');
+                }
+            } catch (error) {
+                console.error('Error submitting for review:', error);
+            }
+        }
+        
+        // 承認
+        async function approveReport() {
+            if (!currentReportId) return;
+            
+            try {
+                const response = await fetch(`/api/accident-reports/${currentReportId}/approve/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    alert('承認しました');
+                    closeModal('detail-modal');
+                    loadReports();
+                } else {
+                    alert('承認に失敗しました');
+                }
+            } catch (error) {
+                console.error('Error approving:', error);
+            }
+        }
+        
+        // 差戻し
+        async function rejectReport() {
+            if (!currentReportId) return;
+            
+            const reason = prompt('差戻し理由を入力してください:');
+            if (!reason) return;
+            
+            try {
+                const response = await fetch(`/api/accident-reports/${currentReportId}/reject/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ reason })
+                });
+                
+                if (response.ok) {
+                    alert('差戻ししました');
+                    closeModal('detail-modal');
+                    loadReports();
+                } else {
+                    alert('差戻しに失敗しました');
+                }
+            } catch (error) {
+                console.error('Error rejecting:', error);
+            }
+        }
+        
+        // PDF出力
+        function downloadPDF() {
+            if (!currentReportId) return;
+            window.open(`/api/accident-reports/${currentReportId}/pdf/`, '_blank');
+        }
+        
+        // フィルター適用
+        function applyFilters() {
+            // TODO: フィルター機能の実装
+            loadReports();
+        }
+        
+        // フォーム送信
+        document.getElementById('create-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const response = await fetch('/api/accident-reports/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const report = await response.json();
+                    alert('報告書を作成しました');
+                    closeModal('create-modal');
+                    this.reset();
+                    loadReports();
+                    openDetailModal(report.id);
+                } else {
+                    const error = await response.json();
+                    alert('作成に失敗しました: ' + JSON.stringify(error));
+                }
+            } catch (error) {
+                console.error('Error creating report:', error);
+                alert('作成中にエラーが発生しました');
+            }
+        });
+    </script>
+</body>
+</html>

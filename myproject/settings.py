@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'billing_management',
+    'statutory_documents',
+    'accident_reporting',
 ]
 
 MIDDLEWARE = [

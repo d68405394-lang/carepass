@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法定書類 - Care Pass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                        sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .header-nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+        
+        .header-nav a:hover {
+            opacity: 1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-title p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .document-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .document-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+        
+        .document-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .document-card.active {
+            border: 2px solid #ffd700;
+        }
+        
+        .document-card.coming-soon {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .document-card.coming-soon:hover {
+            transform: none;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .document-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .document-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #ffd700;
+        }
+        
+        .document-card p {
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        .document-card .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .badge-active {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+        
+        .badge-coming {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+        
+        .info-section {
+            margin-top: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .info-section h2 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+        
+        .info-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .info-section li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .info-section li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00ff00;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="header-logo">🏥 Care Pass</a>
+        <nav class="header-nav">
+            <a href="/">ホーム</a>
+            <a href="/progress/">進捗管理</a>
+            <a href="/billing/">請求管理</a>
+            <a href="/statutory-documents/">法定書類</a>
+        </nav>
+    </div>
+    
+    <div class="container">
+        <div class="page-title">
+            <h1>📋 法定書類管理</h1>
+            <p>法令で義務付けられた書類をAIで自動作成・管理します</p>
+        </div>
+        
+        <div class="document-grid">
+            <a href="/accident-reports/" class="document-card active">
+                <div class="document-icon">⚠️</div>
+                <h3>事故・ヒヤリハット報告書</h3>
+                <p>事故発生時の報告書をAIが自動生成。原因分析・再発防止策まで一気通貫で作成し、運営指導に対応した形式でPDF出力できます。</p>
+                <span class="badge badge-active">利用可能</span>
+            </a>
+            
+            <div class="document-card coming-soon">
+                <div class="document-icon">📝</div>
+                <h3>個別支援計画書</h3>
+                <p>利用者ごとの支援計画を作成・管理します。アセスメント結果を基にAIが計画案を提案します。</p>
+                <span class="badge badge-coming">準備中</span>
+            </div>
+            
+            <div class="document-card coming-soon">
+                <div class="document-icon">📊</div>
+                <h3>モニタリング報告書</h3>
+                <p>支援計画の進捗状況を定期的に評価・記録します。日々の記録から自動集計されます。</p>
+                <span class="badge badge-coming">準備中</span>
+            </div>
+            
+            <div class="document-card coming-soon">
+                <div class="document-icon">📋</div>
+                <h3>アセスメントシート</h3>
+                <p>利用者の状態を多角的に評価・記録します。標準様式に対応しています。</p>
+                <span class="badge badge-coming">準備中</span>
+            </div>
+            
+            <div class="document-card coming-soon">
+                <div class="document-icon">🏠</div>
+                <h3>サービス提供記録</h3>
+                <p>日々のサービス提供内容を記録します。請求データと自動連携します。</p>
+                <span class="badge badge-coming">準備中</span>
+            </div>
+            
+            <div class="document-card coming-soon">
+                <div class="document-icon">📞</div>
+                <h3>相談支援記録</h3>
+                <p>利用者・家族との相談内容を記録します。経過を時系列で管理できます。</p>
+                <span class="badge badge-coming">準備中</span>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>🛡️ 運営指導対応機能</h2>
+            <ul>
+                <li>全ての変更履歴を自動保存（改ざん防止）</li>
+                <li>誰が・いつ・何をしたかの監査証跡を完全記録</li>
+                <li>厚生労働省の標準様式に準拠したPDF出力</li>
+                <li>電子保存と紙提出の両方に対応</li>
+                <li>管理者承認ワークフローによる品質管理</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 Care Pass - 福祉管理システム</p>
+        </div>
+    </div>
+</body>
+</html>

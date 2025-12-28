@@ -103,6 +103,14 @@ def progress_input(request):
     }
     return render(request, 'progress_input.html', context)
 
+def statutory_documents(request):
+    """法定書類ハブページ"""
+    return render(request, 'statutory_documents.html')
+
+def accident_reports(request):
+    """事故・ヒヤリハット報告書ページ"""
+    return render(request, 'accident_reports.html')
+
 def work_record_input(request):
     """勤務時間記録入力フォーム"""
     if request.method == 'POST':

@@ -28,7 +28,11 @@ urlpatterns = [
     path("ai-analysis/", views.ai_analysis, name='ai_analysis'),
     path("billing/", views.billing, name='billing'),
     path("guardian/", views.guardian, name='guardian'),
+    path("statutory-documents/", views.statutory_documents, name='statutory_documents'),
+    path("accident-reports/", views.accident_reports, name='accident_reports'),
     path("api/", include("billing_management.urls")),
+    path("api/statutory-documents/", include("statutory_documents.urls")),
+    path("api/accident-reports/", include("accident_reporting.urls")),
     path('admin/', admin.site.urls),
 ]
 
