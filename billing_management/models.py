@@ -246,3 +246,7 @@ class StaffPeerReview(models.Model):
 
     def __str__(self):
         return f"{self.reviewer.full_name} -> {self.reviewed_staff.full_name} ({self.review_date})"
+
+
+# AI関連モデルのインポート
+from .ai.models import AIPrompt, AILog
