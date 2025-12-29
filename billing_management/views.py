@@ -884,6 +884,8 @@ from .modules.portal.views import GuardianLoginView, GuardianLogoutView, Guardia
 from .modules.gamification.views import ClientBadgesView, CheckBadgesView, ClientPointsView, AwardPointsView, LeaderboardView
 
 
+from .models import ServiceLocation
+
 # 事業所一覧 API
 class ServiceLocationListView(APIView):
     """事業所一覧を取得するAPI"""
